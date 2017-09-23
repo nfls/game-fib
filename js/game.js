@@ -155,7 +155,7 @@ function loadUsername(){
             }
         });
     }
-    $.cookie("token",$.cookie("token"),{domain:"nfls.io",path:"/"});
+    //$.cookie("token",$.cookie("token"),{domain:"nfls.io",path:"/"});
     $.ajax({
         type: "GET",
         url: "https://api.nfls.io/center/username",
