@@ -648,6 +648,9 @@ game.States.play = function () {
             this.currentScoreText.text = ++this.score;
             //updateScore(this.score);
             var self = this;
+            if(!isOnline){
+                alert(this.score);
+            }
             $.ajax({
                 //async: false,
                 type: "POST",
