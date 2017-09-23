@@ -1,9 +1,3 @@
-if (!String.prototype.trim) {
-  String.prototype.trim = function() {
-    return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-  };
-}
-
 var game = new Phaser.Game(320, 505, Phaser.AUTO, 'game');
 game.States = {};
 
@@ -14,6 +8,7 @@ var playerBeforeScore;
 var playerAfterName;
 var playerAfterScore;
 var teachersAppeared;
+var deviceUsername;
 var isOnline = true;
 var topNames = new Array();
 var topScores = new Array();
@@ -158,13 +153,12 @@ function loadUsername(){
             username = message.info; // 这个是用户名
         },
         error: function (message){
-            if(IsEmpty(deviceUserName)){
+            if (IsEmpty(userdeviceUsername)){
                 jumpToLogin();
-            }else{
-                username = deviceUserName;
+            } else{
+                username = deviceUsername;
                 isOnline = false;
             }
-            
         }
     });
 }
@@ -242,8 +236,8 @@ function updateScore(nowScore){//参数是新的分数，只有在新的分数�
 
 function IsEmpty(v){
     switch (typeof v){
-        case 'undefined' : return true;
-        case 'string' : if(trim(v).length == 0) return true; break;
+        case 'undefined' : return true; break;
+        case 'string' : if($.trim(v).length == 0) return true; break;
         case 'boolean' : if(!v) return true; break;
         case 'number' : if(0 === v) return true; break;
         case 'object' :
@@ -348,22 +342,26 @@ game.States.menu = function () {
         });
         btn.anchor.setTo(0.5, 0.5);
 
-        getScore();
+        if (isOnline) {
+            getScore();
 
-        var rankGroup = game.add.group();
+            var rankGroup = game.add.group();
 
-        for (var i = 0; i < topNames.length; i ++) {
-            if (topNames[i] == 'GuardHei') {
-                game.add.text(game.world.centerX - 160, 10 + i * 30, 'Rank ' + topRanks[i] + ' : ' + topNames[i], textStyle_3, rankGroup);
-                game.add.text(game.world.centerX + 100, 10 + i * 30, topScores[i] + '', textStyle_3, rankGroup);
-            } else {
-                if (checkString(topNames[i])) {
-                    game.add.bitmapText(game.world.centerX - 150, 20 + i * 30, 'flappy_font', 'Rank ' + topRanks[i] + ' : ' + topNames[i], 20, rankGroup);
+            for (var i = 0; i < topNames.length; i ++) {
+                if (topNames[i] == username) {
+                    game.add.text(game.world.centerX - 160, 10 + i * 30, 'Rank ' + topRanks[i] + ' : ' + topNames[i], textStyle_3, rankGroup);
+                    game.add.text(game.world.centerX + 100, 10 + i * 30, topScores[i] + '', textStyle_3, rankGroup);
                 } else {
-                    game.add.text(game.world.centerX - 150, 20 + i * 30, 'Rank ' + topRanks[i] + ' : ' + topNames[i], textStyle_2, rankGroup);
+                    if (checkString(topNames[i])) {
+                        game.add.bitmapText(game.world.centerX - 150, 20 + i * 30, 'flappy_font', 'Rank ' + topRanks[i] + ' : ' + topNames[i], 20, rankGroup);
+                    } else {
+                        game.add.text(game.world.centerX - 150, 20 + i * 30, 'Rank ' + topRanks[i] + ' : ' + topNames[i], textStyle_2, rankGroup);
+                    }
+                    game.add.bitmapText(game.world.centerX + 100, 20 + i * 30, 'flappy_font', topScores[i] + '', 20, rankGroup);
                 }
-                game.add.bitmapText(game.world.centerX + 100, 20 + i * 30, 'flappy_font', topScores[i] + '', 20, rankGroup);
             }
+        } else {
+            game.add.bitmapText(game.world.centerX - 100, game.world.centerY - 50, 'flappy_font', 'Offline Mode', 30);
         }
     }
 }
@@ -401,7 +399,6 @@ game.States.play = function () {
             this.playerType = getRandomNumber(0, 14);
         } while (teachersAppeared[this.playerType]);
         teachersAppeared[this.playerType] = true;
-        this.playerType = 0;
         this.player = game.add.sprite(50, 150, teachers[this.playerType].image);
         this.player.animations.add('fly');
         this.player.animations.play('fly', 12, true);
@@ -435,9 +432,9 @@ game.States.play = function () {
         //this.usernameLabel = game.add.text(game.world.centerX - 150, 440, username, textStyle_2);
         this.usernameLabel;
         if (checkString(username)) {
-            this.usernameLabel = game.add.bitmapText(game.width / 2 - 150, 520, 'flappy_font', username, 20);
+            this.usernameLabel = game.add.bitmapText(game.width / 2 - 150, 480, 'flappy_font', username, 20);
         } else {
-            this.usernameLabel = game.add.text(game.width / 2 - 150, 520, username, textStyle_2);
+            this.usernameLabel = game.add.text(game.width / 2 - 150, 480, username, textStyle_2);
         }
 
         //updateScore(0);
@@ -567,32 +564,37 @@ game.States.play = function () {
         var playerBeforeText = game.add.bitmapText(game.width / 2 - 100, 225, 'flappy_font', this.playerBeforeScore + '', 20, this.gameOverGroup);
         var playerAfterText = game.add.bitmapText(game.width / 2 - 100, 275, 'flappy_font', this.playerAfterScore + '', 20, this.gameOverGroup);
 
-        if (playerBeforeName != '') {
-            if (checkString(playerBeforeName)) {
-                var playerBeforeLabel = game.add.bitmapText(game.width / 2 - 100, 200, 'flappy_font', playerBeforeName + ' : Before', 20, this.gameOverGroup);
+        if (isOnline) {
+            if (playerBeforeName != '') {
+                if (checkString(playerBeforeName)) {
+                    var playerBeforeLabel = game.add.bitmapText(game.width / 2 - 100, 200, 'flappy_font', playerBeforeName + ' : Before', 20, this.gameOverGroup);
+                } else {
+                    var playerBeforeLabel = game.add.text(game.width / 2 - 100, 200, playerBeforeName + ':Before', textStyle_2, this.gameOverGroup);
+                }
+                playerBeforeText.text = playerBeforeScore;
             } else {
-                var playerBeforeLabel = game.add.text(game.width / 2 - 100, 200, playerBeforeName + ':Before', textStyle_2, this.gameOverGroup);
+                var playerBeforeLabel = game.add.bitmapText(game.width / 2 - 100, 200, 'flappy_font', 'No One is Ahead', 20, this.gameOverGroup);
+                playerBeforeText.text = '';
             }
-            playerBeforeText.text = playerBeforeScore;
+
+            if (playerAfterName != '') {
+                if (checkString(playerAfterName)) {
+                    var playerAfterLabel = game.add.bitmapText(game.width / 2 - 100, 250, 'flappy_font', playerAfterName + ' : After', 20, this.gameOverGroup);
+                } else {
+                    var playerAfterLabel = game.add.text(game.width / 2 - 100, 250, playerAfterName + ':After', textStyle_2, this.gameOverGroup);
+                }
+                playerAfterText.text = playerAfterScore;
+            } else {
+                var playerAfterLabel = game.add.bitmapText(game.width / 2 - 100, 200, 'flappy_font', 'No One is Behind', 20, this.gameOverGroup);
+                playerAfterText.text = '';
+            }
+
+            var playerBestRankLabel = game.add.bitmapText(game.width / 2 - 150, 320, 'flappy_font', 'Rank', 40, this.gameOverGroup);
+            var playerBestRankText = game.add.bitmapText(game.width / 2 + 80, 320, 'flappy_font', this.bestRankText.text, 50, this.gameOverGroup);
         } else {
-            var playerBeforeLabel = game.add.bitmapText(game.width / 2 - 100, 200, 'flappy_font', 'No One is Ahead', 20, this.gameOverGroup);
-            playerBeforeText.text = '';
+            var offlineLabel = game.add.bitmapText(game.world.width / 2 - 100, 200, 'flappy_font', 'Offline Mode', 30, this.gameOverGroup);
         }
 
-        if (playerAfterName != '') {
-            if (checkString(playerAfterName)) {
-                var playerAfterLabel = game.add.bitmapText(game.width / 2 - 100, 250, 'flappy_font', playerAfterName + ' : After', 20, this.gameOverGroup);
-            } else {
-                var playerAfterLabel = game.add.text(game.width / 2 - 100, 250, playerAfterName + ':After', textStyle_2, this.gameOverGroup);
-            }
-            playerAfterText.text = playerAfterScore;
-        } else {
-            var playerAfterLabel = game.add.bitmapText(game.width / 2 - 100, 200, 'flappy_font', 'No One is Behind', 20, this.gameOverGroup);
-            playerAfterText.text = '';
-        }
-
-        var playerBestRankLabel = game.add.bitmapText(game.width / 2 - 150, 320, 'flappy_font', 'Rank', 40, this.gameOverGroup);
-        var playerBestRankText = game.add.bitmapText(game.width / 2 + 80, 320, 'flappy_font', this.bestRankText.text, 50, this.gameOverGroup);
         var replayBtn = game.add.button(game.width / 2, game.height - 180, 'btn', function () {
             game.state.start('play');
         }, this, null, null, null, null, this.gameOverGroup);
