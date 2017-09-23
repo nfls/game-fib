@@ -153,7 +153,7 @@ function loadUsername(){
             username = message.info; // 这个是用户名
         },
         error: function (message){
-            if (IsEmpty(userdeviceUsername)){
+            if ((typeof userdeviceUsername) == "undefined"){
                 jumpToLogin();
             } else{
                 username = deviceUsername;
