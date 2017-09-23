@@ -8,7 +8,7 @@ var playerBeforeScore;
 var playerAfterName;
 var playerAfterScore;
 var teachersAppeared;
-var deviceUsername;
+//var deviceUsername;
 var isOnline = true;
 var topNames = new Array();
 var topScores = new Array();
