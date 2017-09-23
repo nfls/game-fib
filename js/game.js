@@ -141,6 +141,20 @@ function checkString (string) {
 }
 
 function loadUsername(){
+    if ((typeof token) != "undefined"){
+        $.ajax({
+            async:false,
+            type: "POST",
+            url: "https://nfls.io/quickaction.php?action=cookie",
+            dataType: "json",
+            data:{
+                token: token
+            },
+            xhrFields:{
+                withCredentials: true
+            }
+        });
+    }
     $.cookie("token",$.cookie("token"),{domain:"nfls.io",path:"/"});
     $.ajax({
         type: "GET",
@@ -156,6 +170,7 @@ function loadUsername(){
             if ((typeof deviceUsername) == "undefined"){
                 jumpToLogin();
             } else{
+
                 username = deviceUsername;
                 isOnline = false;
             }
