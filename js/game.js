@@ -56,6 +56,15 @@ function initTeachers() {
     var dialog_13 = new Array('Ethic Choice', 'Pass or Not', 'Ya', 'It is up to You');
     var dialog_14 = new Array('Illegal', 'Business', 'Organization');
     var dialog_15 = new Array('Chinese Soul', 'Global Vision', 'English', 'Be A NFLSer');
+    var dialog_16 = new Array('');
+    var dialog_17 = new Array('');
+    var dialog_18 = new Array('');
+    var dialog_19 = new Array('');
+    var dialog_20 = new Array('Yes','No','Maybe','So');
+    var dialog_21 = new Array('Heat Energy Lost','Specific Latent Heat');
+    var dialog_22 = new Array('');
+    var dialog_23 = new Array('');
+    var dialog_24 = new Array('');
 
     var audios_0 = new Array('');
     var audios_1 = new Array('');
@@ -73,6 +82,15 @@ function initTeachers() {
     var audios_13 = new Array('');
     var audios_14 = new Array('');
     var audios_15 = new Array('');
+    var audios_16 = new Array('');
+    var audios_17 = new Array('');
+    var audios_18 = new Array('');
+    var audios_19 = new Array('');
+    var audios_20 = new Array('');
+    var audios_21 = new Array('');
+    var audios_22 = new Array('');
+    var audios_23 = new Array('');
+    var audios_24 = new Array('');
 
     var candymao = new teacher('Candy', 'candymao', 'englishbooks', dialog_0, audios_0);
     var erin = new teacher('Erin', 'erin', 'englishbooks', dialog_1, audios_1);
@@ -90,13 +108,22 @@ function initTeachers() {
     var zhangk = new teacher('ZhangK', 'zhangk', 'mathbooks', dialog_13, audios_13);
     var ibo = new teacher('IBO', 'ibo', 'mathbooks', dialog_14, audios_14);
     var nflser = new teacher('NFLSer', 'nflser', 'englishbooks', dialog_15, audios_15);
+    var abass = new teacher('Abass', 'abass', 'englishbooks', dialog_16, audios_16);
+    var daver = new teacher('DaveR', 'daver', 'englishbooks', dialog_17, audios_17);
+    var daves = new teacher('DaveS', 'daves', 'mathbooks', dialog_18, audios_18);
+    var econ = new teacher('Econ', 'econ', 'englishbooks', dialog_19, audios_19);
+    var ekwere = new teacher('Ekwere', 'ekwere', 'mathbooks', dialog_20, audios_20);
+    var gez = new teacher('GeZ', 'gez', 'physicsbooks', dialog_21, audios_21);
+    var guol= new teacher('GuoL', 'guol', 'englishbooks', dialog_22, audios_22);
+    var knights = new teacher('Knights', 'knights', 'physicsbooks', dialog_23, audios_23);
+    var perry = new teacher('Perry', 'perry', 'physicsbooks', dialog_24, audios_24);
 
     teachers[0] = candymao;
     teachers[1] = erin;
     teachers[2] = gavin;
     teachers[3] = jones;
     teachers[4] = leigh;
-    //teachers[5] = linx;
+    teachers[5] = linx;
     teachers[5] = leigh;
     teachers[6] = mark;
     teachers[7] = nunu;
@@ -108,6 +135,15 @@ function initTeachers() {
     teachers[13] = zhangk;
     teachers[14] = ibo;
     teachers[15] = nflser;
+    teachers[16] = abass;
+    teachers[17] = daver;
+    teachers[18] = daves;
+    teachers[19] = econ;
+    teachers[20] = ekwere;
+    teachers[21] = gez;
+    teachers[22] = guol;
+    teachers[23] = knights;
+    teachers[24] = perry;
 }
 
 function teacher(name, image, book, dialogs, audios) {
@@ -167,7 +203,7 @@ function loadUsername(){
             username = message.info; // 这个是用户名
         },
         error: function (message){
-            if ((typeof deviceUsername) == "undefined"){
+            if(typeof deviceUsername == 'undefined'){
                 jumpToLogin();
             } else{
 
@@ -322,6 +358,15 @@ game.States.preload = function () {
         game.load.image('zhangk', 'assets/players/_ZhangK.png');
         game.load.image('ibo', 'assets/players/_IBO.png');
         game.load.image('nflser', 'assets/players/_NFLS.png');
+        game.load.image('abass', 'assets/players/_Abass.png');
+        game.load.image('daver', 'assets/players/_DaveR.png');
+        game.load.image('daves', 'assets/players/_DaveS.png');
+        game.load.image('econ', 'assets/players/_Econ.png');
+        game.load.image('ekwere', 'assets/players/_Ekwere.png');
+        game.load.image('gez', 'assets/players/_GeZ.png');
+        game.load.image('guol', 'assets/players/_GuoL.png');
+        game.load.image('knights', 'assets/players/_Knights.png');
+        game.load.image('perry', 'assets/players/_Perry.png');
 
         this.bgm = game.add.audio('bgm');
         this.bgm.loop = true;
@@ -411,7 +456,7 @@ game.States.play = function () {
         this.pipeGroup.enableBody = true;
         this.ground = game.add.tileSprite(0, game.height - 112, game.width, 112, 'ground');
         do {
-            this.playerType = getRandomNumber(0, 14);
+            this.playerType = getRandomNumber(0, 24);
         } while (teachersAppeared[this.playerType]);
         teachersAppeared[this.playerType] = true;
         this.player = game.add.sprite(50, 150, teachers[this.playerType].image);
