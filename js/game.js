@@ -55,7 +55,7 @@ function initTeachers() {
     var dialog_12 = new Array('Heiheihei', 'Be Clever', 'Naive');
     var dialog_13 = new Array('Ethic Choice', 'Pass or Not', 'Ya', 'It is up to You');
     var dialog_14 = new Array('Illegal', 'Business', 'Organization');
-    var dialog_15 = new Array('Chinese Soul', 'Global Vision', 'English', 'Be A NFLSer');
+    var dialog_15 = new Array('');//'Chinese Soul', 'Global Vision', 'English', 'Be A NFLSer');
     var dialog_16 = new Array('');
     var dialog_17 = new Array('');
     var dialog_18 = new Array('');
@@ -458,7 +458,8 @@ game.States.play = function () {
         do {
             this.playerType = getRandomNumber(0, 24);
         } while (teachersAppeared[this.playerType]);
-        teachersAppeared[this.playerType] = true;
+	this.playerType = 15;
+        //teachersAppeared[this.playerType] = true;
         this.player = game.add.sprite(50, 150, teachers[this.playerType].image);
         this.player.animations.add('fly');
         this.player.animations.play('fly', 12, true);
@@ -705,7 +706,10 @@ game.States.play = function () {
     this.checkScore = function (pipe) {
         if (!pipe.hasScored && pipe.y <= 0 && pipe.x <= this.player.x - 17 - 54) {
             pipe.hasScored = true;
-            this.currentScoreText.text = ++this.score;
+            //if(teacher.name == "NFLSer")
+		//console.log("hi");
+	    this.score = this.score + 5;
+	    this.currentScoreText.text = this.score;
             //updateScore(this.score);
             var self = this;
             if(!isOnline){
