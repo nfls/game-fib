@@ -216,7 +216,7 @@ function loadUsername(){
 
 function jumpToLogin(){//转跳到登录界面
     $.cookie('token', '', {path: '/', domain: 'nfls.io', secure: true, expires: -1});
-    window.location.href='https://center.nfls.io/operation/?reason=notlogin&redir=https%3a%2f%2fgame.nfls.io';
+    window.location.href='https://center.nfls.io/operation/?reason=notlogin&redir=https%3a%2f%2fgame.nfls.io%2ffib';
 }
 
 function pharseScore(message){
