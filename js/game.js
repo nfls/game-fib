@@ -235,7 +235,7 @@ function getScore(){
     $.ajax({
         async: false,
         type: "GET",
-        url: "https://api.nfls.io/center/rank",
+        url: "https://api.nfls.io/game/fib/rank",
         dataType: "json",
         xhrFields:{
             withCredentials: true
@@ -268,7 +268,7 @@ function updateScore(nowScore){//参数是新的分数，只有在新的分数�
     $.ajax({
         //async: false,
         type: "POST",
-        url: "https://api.nfls.io/center/rank",
+        url: "https://api.nfls.io/game/fib/rank",
         dataType: "json",
         data: {
             score:nowScore
@@ -331,12 +331,12 @@ game.States.preload = function () {
         game.load.image('nfls', 'assets/nfls.png');
 
         game.load.bitmapFont('flappy_font', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt');
-
-	    game.load.audio('bgm', 'assets/audios/bgm.mp3');
-        game.load.audio('fly_sound', 'assets/audios/flap.wav');
-        game.load.audio('score_sound', 'assets/audios/score.wav');
-        game.load.audio('hit_pipe_sound', 'assets/audios/pipe-hit.wav');
-        game.load.audio('hit_ground_sound', 'assets/audios/ouch.wav');
+        var bgms = ["assets/audios/super_original.m4a","assets/audios/super_piano.m4a"];
+	    game.load.audio('bgm', bgms[getRandomNumber(0, 1)]);
+        game.load.audio('fly_sound', 'assets/audios/flap.m4a');
+        game.load.audio('score_sound', 'assets/audios/score.m4a');
+        game.load.audio('hit_pipe_sound', 'assets/audios/pipe-hit.m4a');
+        game.load.audio('hit_ground_sound', 'assets/audios/ouch.m4a');
 
         game.load.image('englishbooks', 'assets/englishbooks.png');
         game.load.image('physicsbooks', 'assets/physicsbooks.png');
@@ -458,8 +458,7 @@ game.States.play = function () {
         do {
             this.playerType = getRandomNumber(0, 24);
         } while (teachersAppeared[this.playerType]);
-	this.playerType = 15;
-        //teachersAppeared[this.playerType] = true;
+        teachersAppeared[this.playerType] = true;
         this.player = game.add.sprite(50, 150, teachers[this.playerType].image);
         this.player.animations.add('fly');
         this.player.animations.play('fly', 12, true);
@@ -504,7 +503,7 @@ game.States.play = function () {
             //async: false,
             type: "POST",
             content: this,
-            url: "https://api.nfls.io/center/rank",
+            url: "https://api.nfls.io/game/fib/rank",
             dataType: "json",
             data: {
                 score: 0
@@ -706,9 +705,7 @@ game.States.play = function () {
     this.checkScore = function (pipe) {
         if (!pipe.hasScored && pipe.y <= 0 && pipe.x <= this.player.x - 17 - 54) {
             pipe.hasScored = true;
-            //if(teacher.name == "NFLSer")
-		//console.log("hi");
-	    this.score = this.score + 5;
+	    this.score ++;
 	    this.currentScoreText.text = this.score;
             //updateScore(this.score);
             var self = this;
@@ -719,7 +716,7 @@ game.States.play = function () {
                 //async: false,
                 type: "POST",
                 content: this,
-                url: "https://api.nfls.io/center/rank",
+                url: "https://api.nfls.io/game/fib/rank",
                 dataType: "json",
                 data: {
                     score:this.score
