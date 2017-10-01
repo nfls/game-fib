@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8348e44d-0d50-4378-99aa-86e07d633cc1" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/audios/bgm.mp3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/audios/flap.wav" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/audios/ground-hit.wav" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/audios/ouch.wav" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/audios/pipe-hit.wav" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/audios/score.wav" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/players/_NFLS.png" afterPath="$PROJECT_DIR$/assets/players/_NFLS.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/game.js" afterPath="$PROJECT_DIR$/js/game.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
     </list>
     <ignored path="flappy-bird.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,7 +26,7 @@
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="432">
-              <caret line="59" column="23" lean-forward="false" selection-start-line="59" selection-start-column="23" selection-end-line="59" selection-end-column="23" />
+              <caret line="59" column="68" lean-forward="false" selection-start-line="59" selection-start-column="68" selection-end-line="59" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -78,8 +69,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/js/game.js" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -233,12 +224,12 @@
       <workItem from="1505527650454" duration="5624000" />
       <workItem from="1505544903466" duration="2307000" />
       <workItem from="1505547554611" duration="144000" />
-      <workItem from="1506869114821" duration="1792000" />
+      <workItem from="1506869114821" duration="2015000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20875000" />
+    <option name="totallyTimeSpent" value="21098000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="26" y="35" width="1443" height="793" extended-state="0" />
@@ -571,7 +562,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
-          <caret line="59" column="23" lean-forward="false" selection-start-line="59" selection-start-column="23" selection-end-line="59" selection-end-column="23" />
+          <caret line="59" column="68" lean-forward="false" selection-start-line="59" selection-start-column="68" selection-end-line="59" selection-end-column="68" />
           <folding />
         </state>
       </provider>
