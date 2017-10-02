@@ -164,7 +164,7 @@ function say(dialogs) {
 }
 
 function checkString (string) {
-    var Letters = '1234567890:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var Letters = '1234567890:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ';
     var i;
     var c;
     for(i = 0; i < string.length; i ++ )   {   //Letters.length() ->>>>取字符长度
@@ -206,7 +206,6 @@ function loadUsername(){
             if(typeof deviceUsername == 'undefined'){
                 jumpToLogin();
             } else{
-
                 username = deviceUsername;
                 isOnline = false;
             }
@@ -254,6 +253,7 @@ function newPhaseScore(message){ // 新方法
     bestScore = message.info.bestScore;
     bestRank = message.info.bestRank;
     currentRank = message.info.nowRank;
+    lastPlayed = message.info.expired;
     if(!IsEmpty(message.info.playerBefore)){
         playerBeforeName = message.info.playerBefore.username;
         playerBeforeScore = message.info.playerBefore.score;
@@ -323,6 +323,7 @@ game.States.preload = function () {
         game.load.image('ground', 'assets/ground.png');
         game.load.image('title', 'assets/title.png');
         game.load.image('btn', 'assets/start-button.png');
+        game.load.image('back_btn', 'assets/back-button.png');
         game.load.image('ready_text', 'assets/get-ready.png');
         game.load.image('play_tip', 'assets/instruction.png');
         game.load.image('game_over', 'assets/gameover.png');
@@ -331,7 +332,7 @@ game.States.preload = function () {
         game.load.image('nfls', 'assets/nfls.png');
 
         game.load.bitmapFont('flappy_font', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt');
-        var bgms = ["assets/audios/super_original.m4a","assets/audios/super_piano.m4a"];
+        var bgms = ["assets/audios/super_original.m4a", "assets/audios/super_piano.m4a"];
 	    game.load.audio('bgm', bgms[getRandomNumber(0, 1)]);
         game.load.audio('fly_sound', 'assets/audios/flap.m4a');
         game.load.audio('score_sound', 'assets/audios/score.m4a');
@@ -446,6 +447,7 @@ game.States.play = function () {
         currentRank = 'null';
         bestRank = 'null';
         bestScore = 'null';
+        lastPlayed = 'null';
         playerBeforeName = '';
         playerBeforeScore = '';
         playerAfterName = '';
@@ -478,7 +480,7 @@ game.States.play = function () {
         this.currentScoreText = game.add.bitmapText(game.world.centerX - 20, 50, 'flappy_font', '0', 36);
         this.bestScoreLabel = game.add.bitmapText(game.world.centerX + 50, 420, 'flappy_font', 'Best Score', 18);
         this.bestScoreText = game.add.bitmapText(game.world.centerX + 50, 440, 'flappy_font', 'null', 20);
-        this.dialogText = game.add.bitmapText(game.world.centerX - 50, 300, 'flappy_font', '', 25);
+        this.dialogText = game.add.bitmapText(game.world.centerX - 50, 310, 'flappy_font', '', 25);
         this.dialogBubble = game.add.bitmapText(this.player.position.x + 20, this.player.position.y, 'flappy_font', '', 30);
         //this.currentRankLabel = game.add.bitmapText(game.world.centerX - 150, 420, 'flappy_font', 'Current Rank', 18);
         //this.currentRankText = game.add.bitmapText(game.world.centerX - 150, 440, 'flappy_font', 'null', 20);
@@ -496,7 +498,8 @@ game.States.play = function () {
         } else {
             this.usernameLabel = game.add.text(game.width / 2 - 150, 480, username, textStyle_2);
         }
-
+        this.rankValidTimeLabel = game.add.bitmapText(game.world.centerX + 30 , 270, 'flappy_font', 'Rank Valid To', 18);
+        this.rankValidTimeText = game.add.bitmapText(game.world.centerX + 30 , 290, 'flappy_font', 'null', 15);
         //updateScore(0);
         var self = this;
         $.ajax({
@@ -523,6 +526,7 @@ game.States.play = function () {
                 self.currentRankText.text = message.info.nowRank;
                 self.bestRankText.text = message.info.bestRank;
                 self.bestScoreText.text = message.info.bestScore;
+                self.rankValidTimeText.text = message.info.expired;
             }
         });
 
@@ -645,7 +649,7 @@ game.States.play = function () {
                 }
                 playerAfterText.text = playerAfterScore;
             } else {
-                var playerAfterLabel = game.add.bitmapText(game.width / 2 - 100, 200, 'flappy_font', 'No One is Behind', 20, this.gameOverGroup);
+                var playerAfterLabel = game.add.bitmapText(game.width / 2 - 100, 250, 'flappy_font', 'No One is Behind', 20, this.gameOverGroup);
                 playerAfterText.text = '';
             }
 
@@ -658,11 +662,15 @@ game.States.play = function () {
         var replayBtn = game.add.button(game.width / 2, game.height - 180, 'btn', function () {
             game.state.start('play');
         }, this, null, null, null, null, this.gameOverGroup);
+        var backBtn = game.add.button(game.width / 2, game.height - 100, 'back_btn', function () {
+            game.state.start('menu');
+        }, this, null, null, null, null, this.gameOverGroup);
         gameOverText.anchor.setTo(0.5, 0);
         scoreboard.anchor.setTo(0.5, 0);
         blankboard.anchor.setTo(0.5, 0);
 
         replayBtn.anchor.setTo(0.5, 0);
+        backBtn.anchor.setTo(0.5, 0);
         this.gameOverGroup.y = 30;
     }
 
@@ -736,6 +744,7 @@ game.States.play = function () {
                     self.currentRankText.text = message.info.nowRank;
                     self.bestRankText.text = message.info.bestRank;
                     self.bestScoreText.text = message.info.bestScore;
+                    self.rankValidTimeText.text = message.info.expired;
                 }
             });
             this.soundScore.play();
