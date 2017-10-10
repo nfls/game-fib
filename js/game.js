@@ -13,6 +13,13 @@ var isOnline = true;
 var topNames = new Array();
 var topScores = new Array();
 var topRanks = new Array();
+var recoverPack;
+var doublePack;
+var bonus = 1;
+var useRecover;
+var useDouble;
+var lastTeacher;
+var lastScore;
 
 textStyle_0 = {
     font: "bold 30px cursive",
@@ -35,6 +42,18 @@ textStyle_2 = {
 textStyle_3 = {
     font: "bold 25px cursive",
     fill: "#ffff37",
+    align: "center"
+}
+
+textStyle_4 = {
+    font: "bold 20px arial",
+    fill: "#2b2b2b",
+    align: "center"
+}
+
+textStyle_5 = {
+    font: "bold 20px arial",
+    fill: "#606366",
     align: "center"
 }
 
@@ -324,6 +343,7 @@ game.States.preload = function () {
         game.load.image('title', 'assets/title.png');
         game.load.image('btn', 'assets/start-button.png');
         game.load.image('back_btn', 'assets/back-button.png');
+        game.load.image('blank_btn', 'assets/blank-button.png');
         game.load.image('ready_text', 'assets/get-ready.png');
         game.load.image('play_tip', 'assets/instruction.png');
         game.load.image('game_over', 'assets/gameover.png');
@@ -444,6 +464,8 @@ game.States.play = function () {
             }
         }
 
+        if (isOnline) this.getPurchased();
+
         currentRank = 'null';
         bestRank = 'null';
         bestScore = 'null';
@@ -452,15 +474,31 @@ game.States.play = function () {
         playerBeforeScore = '';
         playerAfterName = '';
         playerAfterScore = '';
+        bonus = 1;
+        this.score = 0;
+        if (useRecover) {
+            this.score = lastScore;
+        }
+        if (useDouble) {
+            bonus = 2;
+        }
+        lastScore = 0;
 
         this.bg = game.add.tileSprite(0, 0, game.width, game.height, 'background');
         this.pipeGroup = game.add.group();
         this.pipeGroup.enableBody = true;
         this.ground = game.add.tileSprite(0, game.height - 112, game.width, 112, 'ground');
-        do {
-            this.playerType = getRandomNumber(0, 24);
-        } while (teachersAppeared[this.playerType]);
-        teachersAppeared[this.playerType] = true;
+        if (!useRecover && !useDouble) {
+            do {
+                this.playerType = getRandomNumber(0, 24);
+            } while (teachersAppeared[this.playerType]);
+            teachersAppeared[this.playerType] = true;
+        } else {
+            this.playerType = lastTeacher;
+        }
+
+        lastTeacher = this.playerType;
+
         this.player = game.add.sprite(50, 150, teachers[this.playerType].image);
         this.player.animations.add('fly');
         this.player.animations.play('fly', 12, true);
@@ -470,14 +508,14 @@ game.States.play = function () {
         this.player.body.setSize(30, 30, this.player.centerX - 15, this.player.centerY - 15);
         game.physics.enable(this.ground, Phaser.Physics.ARCADE);
         this.ground.body.immovable = true;
-        this.nfls = game.add.sprite(game.world.centerX - 50, 350, 'nfls');
+        this.nfls = game.add.button(game.world.centerX - 50, 350, 'nfls');
 
         this.soundFly = game.add.sound('fly_sound');
         this.soundScore = game.add.sound('score_sound');
         this.soundHitPipe = game.add.sound('hit_pipe_sound');
         this.soundHitGround = game.add.sound('hit_ground_sound')
         this.currentScoreLabel = game.add.bitmapText(game.world.centerX - 145, 5, 'flappy_font', 'Predicted Score', 36)
-        this.currentScoreText = game.add.bitmapText(game.world.centerX - 20, 50, 'flappy_font', '0', 36);
+        this.currentScoreText = game.add.bitmapText(game.world.centerX - 20, 50, 'flappy_font', this.score + '', 36);
         this.bestScoreLabel = game.add.bitmapText(game.world.centerX + 50, 420, 'flappy_font', 'Best Score', 18);
         this.bestScoreText = game.add.bitmapText(game.world.centerX + 50, 440, 'flappy_font', 'null', 20);
         this.dialogText = game.add.bitmapText(game.world.centerX - 50, 310, 'flappy_font', '', 25);
@@ -533,6 +571,14 @@ game.States.play = function () {
         game.add.text(game.world.centerX + 70, 460, '@GuardHei', textStyle_1);
         game.add.text(game.world.centerX + 70, 480, '@mmlmml1', textStyle_1);
 
+        if (isOnline) {
+            this.doubleBtn = game.add.button(game.width / 2 + 80, game.height - 180, 'blank_btn', function () {
+                this.utilizeRequest('double');
+            }, this, null, null, null, null);
+            this.doubleLabel = game.add.text(game.width / 2 + 90, game.height - 170, 'Double', textStyle_5);
+            this.doubleText = game.add.text(game.width / 2 + 90, game.height - 150, doublePack + '', textStyle_4);
+        }
+
         this.readyText = game.add.image(game.width / 2, 40, 'ready_text');
         this.playTip = game.add.image(game.width / 2, 300, 'play_tip');
         this.readyText.anchor.setTo(0.5, 0);
@@ -541,7 +587,16 @@ game.States.play = function () {
         this.hasStarted = false;
         game.time.events.loop(1200, this.generatePipes, this);
         game.time.events.stop(false);
-        game.input.onDown.addOnce(this.startGame, this);
+        //game.input.onDown.addOnce(this.startGame, this);
+
+        this.nfls.inputEnabled = true;
+        this.nfls.events.onInputDown.addOnce(this.startGame, this);
+
+        useRecover = false;
+        if (useDouble) {
+            useDouble = false;
+            this.startGame();
+        }
     };
 
     this.update = function () {
@@ -555,11 +610,16 @@ game.States.play = function () {
     }
 
     this.startGame = function () {
+        if (isOnline) {
+            this.doubleBtn.destroy();
+            this.doubleLabel.destroy();
+            this.doubleText.destroy();
+        }
         this.gameSpeed = 200;
         this.gameIsOver = false;
         this.hasHitGround = false;
         this.hasStarted = true;
-        this.score = 0;
+        //this.score = 0;
         this.bg.autoScroll(-(this.gameSpeed / 10), 0);
         this.ground.autoScroll(-this.gameSpeed, 0);
         this.player.body.gravity.y = 1150;
@@ -604,7 +664,67 @@ game.States.play = function () {
         this.gameIsOver = true;
         this.stopGame();
         if (show_text) this.showGameOverText();
-    };
+    }
+
+    this.getPurchased = function() {
+        $.ajax({
+            async: false,
+            type: "GET",
+            content: this,
+            url: "https://api.nfls.io/game/fib/purchase",
+            xhrFields:{
+                withCredentials: true
+            },
+            success: function(message){
+                recoverPack = message.info.recoverPack;
+                doublePack = message.info.doublePack;
+            }
+        });
+    }
+
+    this.purchaseRequest = function(packType) {
+        alert(packType);
+    }
+
+    this.utilizeRequest = function(packType) {
+        var self = this;
+        var needToPurchase = false;
+        switch (packType) {
+            case "recover": if (recoverPack == 0) needToPurchase = true; break;
+            case "double": if (doublePack == 0) needToPurchase = true; break;
+        }
+        if (needToPurchase) {
+            if (typeof deviceUsename != "undefined") {
+                this.purchaseRequest(packType);
+            } else {
+                alert("😂Sorry, only iOS device supports purchasement.");
+            }
+            return;
+        } else {
+            $.ajax({
+                async: false,
+                type: "POST",
+                content: this,
+                url: "https://api.nfls.io/game/fib/purchase",
+                dataType: "json",
+                data: {
+                    pack: packType
+                },
+                xhrFields:{
+                    withCredentials: true
+                },
+                success: function(message){
+                    recoverPack = message.info.recoverPack;
+                    doublePack = message.info.doublePack;
+                    switch (packType) {
+                        case "recover": useRecover = true; break;
+                        case "double": useDouble = true; break;
+                    }
+                }
+            });
+            game.state.start('play');
+        }
+    }
 
     this.showGameOverText = function () {
         var self = this;
@@ -659,18 +779,30 @@ game.States.play = function () {
             var offlineLabel = game.add.bitmapText(game.world.width / 2 - 100, 200, 'flappy_font', 'Offline Mode', 30, this.gameOverGroup);
         }
 
-        var replayBtn = game.add.button(game.width / 2, game.height - 180, 'btn', function () {
+        var replayBtn = game.add.button(game.width / 2 + 80, game.height - 180, 'btn', function () {
             game.state.start('play');
         }, this, null, null, null, null, this.gameOverGroup);
         var backBtn = game.add.button(game.width / 2, game.height - 100, 'back_btn', function () {
             game.state.start('menu');
         }, this, null, null, null, null, this.gameOverGroup);
+        if (isOnline) {
+            var recoverBtn = game.add.button(game.width / 2 - 80, game.height - 180, 'blank_btn', function () {
+                this.utilizeRequest('recover');
+            }, this, null, null, null, null, this.gameOverGroup);
+            var recoverLabel = game.add.text(game.width / 2 - 90, game.height - 170, 'Recover', textStyle_5, this.gameOverGroup);
+            var recoverText = game.add.text(game.width / 2 - 50, game.height - 145, recoverPack + '', textStyle_4, this.gameOverGroup);
+            replayBtn.position.x = backBtn.position.x;
+            replayBtn.position.y = backBtn.position.y + 80;
+            recoverLabel.anchor.setTo(0.5, 0);
+            recoverText.anchor.setTo(0.5, 0);
+        }
         gameOverText.anchor.setTo(0.5, 0);
         scoreboard.anchor.setTo(0.5, 0);
         blankboard.anchor.setTo(0.5, 0);
 
         replayBtn.anchor.setTo(0.5, 0);
         backBtn.anchor.setTo(0.5, 0);
+        recoverBtn.anchor.setTo(0.5, 0);
         this.gameOverGroup.y = 30;
     }
 
@@ -713,7 +845,8 @@ game.States.play = function () {
     this.checkScore = function (pipe) {
         if (!pipe.hasScored && pipe.y <= 0 && pipe.x <= this.player.x - 17 - 54) {
             pipe.hasScored = true;
-	    this.score ++;
+	    this.score += 1 * bonus;
+        lastScore = this.score;
 	    this.currentScoreText.text = this.score;
             //updateScore(this.score);
             var self = this;
@@ -727,7 +860,7 @@ game.States.play = function () {
                 url: "https://api.nfls.io/game/fib/rank",
                 dataType: "json",
                 data: {
-                    score:this.score
+                    score: this.score
                 },
                 xhrFields:{
                     withCredentials: true
@@ -775,6 +908,18 @@ function getRandomNumber(min, max) {
     var range = max - min;
     var rand = Math.random();
     return (min + Math.round(rand * range));
+}
+
+function onPurchased(purchased, type, used) {
+    type = type || null;
+    used = used || true;
+    if (onPurchased) {
+        switch (type) {
+            case "recover": useRecover = true; break;
+            case "double": useDouble = true; break;
+        }
+    }
+    game.state.start('play');
 }
 
 game.state.add('boot', game.States.boot);
