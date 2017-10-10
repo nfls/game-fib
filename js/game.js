@@ -694,7 +694,7 @@ game.States.play = function () {
             case "double": if (doublePack == 0) needToPurchase = true; break;
         }
         if (needToPurchase) {
-            if (typeof deviceUsename != "undefined") {
+            if (typeof deviceUsername != "undefined") {
                 this.purchaseRequest(packType);
             } else {
                 alert("😂Sorry, only iOS device supports purchasement.");

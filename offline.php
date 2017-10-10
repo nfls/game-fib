@@ -4,16 +4,15 @@ function stringEndsWith($whole, $end)
     return (strpos($whole, $end, strlen($whole) - strlen($end)) !== false);
 }
 	$ua = $_SERVER['HTTP_USER_AGENT'];
-	if(strpos($ua, "NFLSers-iOS") === false){
-		$file = "version.production.lock";
-	}else{
+	//$file = "version.lock";
+	if(!strpos($ua, "NFLSers-iOS") === false){
 		$version_start = strpos($ua, "/");
 		$version_end = strpos($ua, " (");
 		$version = substr($ua, $version_start + 1, $version_end - $version_start - 1);
 		if(version_compare($version, "1.2.3",">=")){
 			$file = "version.dev.lock";
 		}else{
-			$file = "version.production.lock";
+			die();
 		}
 	}
 	$v = file_get_contents($file);
