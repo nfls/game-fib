@@ -6,7 +6,7 @@ function stringEndsWith($whole, $end)
 	$ua = $_SERVER['HTTP_USER_AGENT'];
 	$version_start = strpos($ua, "/");
 	$version_end = strpos($ua, " (");
-	$version = substr($ua, $version_start, $version_start-$version_end);
+	$version = substr($ua, $version_start + 1, $version_end - $version_start);
 	die($version);
 	$v = file_get_contents("version.lock");
 	if(isset($_GET["version"]) && $v == $_GET["version"]){
