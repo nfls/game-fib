@@ -3,6 +3,11 @@ function stringEndsWith($whole, $end)
 {
     return (strpos($whole, $end, strlen($whole) - strlen($end)) !== false);
 }
+	$ua = $_SERVER['HTTP_USER_AGENT'];
+	$version_start = strpos($ua, "/");
+	$version_end = strpos($ua, " (");
+	$version = substr($ua, $version_start, $version_start-$version_end);
+	die($version);
 	$v = file_get_contents("version.lock");
 	if(isset($_GET["version"]) && $v == $_GET["version"]){
 		die();
