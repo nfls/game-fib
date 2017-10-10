@@ -17,7 +17,7 @@ function stringEndsWith($whole, $end)
 		}
 	}
 	$v = file_get_contents($file);
-	if(isset($_GET["version"]) && $v == $_GET["version"]){
+	if(isset($_GET["version"]) && intval($v) < intval($_GET["version"])){
 		die();
 	}
 	// Get real path for our folder
