@@ -5,7 +5,7 @@ function stringEndsWith($whole, $end)
 }
 	$ua = $_SERVER['HTTP_USER_AGENT'];
 	//$file = "version.lock";
-	if(!strpos($ua, "NFLSers-iOS") === false){
+	if(!(strpos($ua, "NFLSers-iOS") === false)){
 		$version_start = strpos($ua, "/");
 		$version_end = strpos($ua, " (");
 		$version = substr($ua, $version_start + 1, $version_end - $version_start - 1);
