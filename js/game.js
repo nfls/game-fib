@@ -773,8 +773,9 @@ game.States.play = function () {
                 playerAfterText.text = '';
             }
 
-            var playerBestRankLabel = game.add.bitmapText(game.width / 2 - 150, 320, 'flappy_font', 'Rank', 40, this.gameOverGroup);
-            var playerBestRankText = game.add.bitmapText(game.width / 2 + 80, 320, 'flappy_font', this.bestRankText.text, 50, this.gameOverGroup);
+            var playerBestRankLabel = game.add.bitmapText(game.width / 2 - 80, game.height / 2 - 200, 'flappy_font', 'Rank', 25, this.gameOverGroup);
+            var playerBestRankText = game.add.bitmapText(game.width / 2 + 40, game.height / 2 - 205, 'flappy_font', this.bestRankText.text, 30, this.gameOverGroup);
+
         } else {
             var offlineLabel = game.add.bitmapText(game.world.width / 2 - 100, 200, 'flappy_font', 'Offline Mode', 30, this.gameOverGroup);
         }
@@ -791,10 +792,11 @@ game.States.play = function () {
             }, this, null, null, null, null, this.gameOverGroup);
             var recoverLabel = game.add.text(game.width / 2 - 90, game.height - 170, 'Recover', textStyle_5, this.gameOverGroup);
             var recoverText = game.add.text(game.width / 2 - 50, game.height - 145, recoverPack + '', textStyle_4, this.gameOverGroup);
-            replayBtn.position.x = backBtn.position.x;
-            replayBtn.position.y = backBtn.position.y + 80;
             recoverLabel.anchor.setTo(0.5, 0);
             recoverText.anchor.setTo(0.5, 0);
+        } else {
+            replayBtn.position.x = backBtn.position.x;
+            replayBtn.position.y = backBtn.position.y + 80;
         }
         gameOverText.anchor.setTo(0.5, 0);
         scoreboard.anchor.setTo(0.5, 0);
