@@ -9,7 +9,7 @@ var playerAfterName;
 var playerAfterScore;
 var teachersAppeared;
 //var deviceUsername;
-var isOnline = true;
+//var isOnline;
 var topNames = new Array();
 var topScores = new Array();
 var topRanks = new Array();
@@ -321,6 +321,9 @@ function IsEmpty(v){
 
 game.States.boot = function () {
     loadUsername();
+    if(typeof deviceUsername == 'undefined'){
+        isOnline = true;
+    }
     this.preload = function () {
         if (!game.device.desktop) {
             this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
@@ -572,11 +575,11 @@ game.States.play = function () {
         game.add.text(game.world.centerX + 70, 480, '@mmlmml1', textStyle_1);
 
         if (isOnline) {
-            this.doubleBtn = game.add.button(game.width / 2 + 80, game.height - 180, 'blank_btn', function () {
-                this.utilizeRequest('double');
-            }, this, null, null, null, null);
+            this.doubleBtn = game.add.sprite(game.width / 2 + 80, game.height - 180, 'blank_btn');
             this.doubleLabel = game.add.text(game.width / 2 + 90, game.height - 170, 'Double', textStyle_5);
             this.doubleText = game.add.text(game.width / 2 + 90, game.height - 150, doublePack + '', textStyle_4);
+            this.doubleBtn.inputEnabled = true;
+            this.doubleBtn.events.onInputDown.addOnce(function() {self.utilizeRequest('double')});
         }
 
         this.readyText = game.add.image(game.width / 2, 40, 'ready_text');
@@ -787,10 +790,11 @@ game.States.play = function () {
             game.state.start('menu');
         }, this, null, null, null, null, this.gameOverGroup);
         if (isOnline) {
-            var recoverBtn = game.add.button(game.width / 2 - 80, game.height - 180, 'blank_btn', function () {
-                this.utilizeRequest('recover');
-            }, this, null, null, null, null, this.gameOverGroup);
-            var recoverLabel = game.add.text(game.width / 2 - 90, game.height - 170, 'Recover', textStyle_5, this.gameOverGroup);
+            var recoverBtn = game.add.sprite(game.width / 2 - 80, game.height - 150, 'blank_btn', this.gameOverGroup);
+            recoverBtn.inputEnabled = true;
+            recoverBtn.events.onInputDown.addOnce(function() {self.utilizeRequest('recover')});
+            recoverBtn.anchor.setTo(0.5, 0);
+            var recoverLabel = game.add.text(game.width / 2 - 90, game.height - 180, 'Recover', textStyle_5, this.gameOverGroup);
             var recoverText = game.add.text(game.width / 2 - 50, game.height - 145, recoverPack + '', textStyle_4, this.gameOverGroup);
             recoverLabel.anchor.setTo(0.5, 0);
             recoverText.anchor.setTo(0.5, 0);
@@ -804,7 +808,6 @@ game.States.play = function () {
 
         replayBtn.anchor.setTo(0.5, 0);
         backBtn.anchor.setTo(0.5, 0);
-        recoverBtn.anchor.setTo(0.5, 0);
         this.gameOverGroup.y = 30;
     }
 
@@ -915,11 +918,8 @@ function getRandomNumber(min, max) {
 function onPurchased(purchased, type, used) {
     type = type || null;
     used = used || true;
-    if (onPurchased) {
-        switch (type) {
-            case "recover": useRecover = true; break;
-            case "double": useDouble = true; break;
-        }
+    if (type != null) {
+        this.utilizeRequest(type);
     }
     game.state.start('play');
 }
