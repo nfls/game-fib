@@ -790,12 +790,13 @@ game.States.play = function () {
             game.state.start('menu');
         }, this, null, null, null, null, this.gameOverGroup);
         if (isOnline) {
-            var recoverBtn = game.add.sprite(game.width / 2 - 80, game.height - 150, 'blank_btn', this.gameOverGroup);
-            recoverBtn.inputEnabled = true;
-            recoverBtn.events.onInputDown.addOnce(function() {self.utilizeRequest('recover')});
-            recoverBtn.anchor.setTo(0.5, 0);
-            var recoverLabel = game.add.text(game.width / 2 - 90, game.height - 180, 'Recover', textStyle_5, this.gameOverGroup);
+            //var recoverBtn = game.add.sprite(game.width / 2 - 80, game.height - 150, 'blank_btn', this.gameOverGroup);
+            var recoverBtn = game.add.button(game.width / 2 - 80, game.height - 180, 'blank_btn', function() {self.utilizeRequest('recover')}, this, null, null, null, null, this.gameOverGroup);
+            var recoverLabel = game.add.text(game.width / 2 - 90, game.height - 175, 'Recover', textStyle_5, this.gameOverGroup);
             var recoverText = game.add.text(game.width / 2 - 50, game.height - 145, recoverPack + '', textStyle_4, this.gameOverGroup);
+            //recoverBtn.inputEnabled = true;
+            //recoverBtn.events.onInputDown.addOnce(function() {self.utilizeRequest('recover')});
+            recoverBtn.anchor.setTo(0.5, 0);
             recoverLabel.anchor.setTo(0.5, 0);
             recoverText.anchor.setTo(0.5, 0);
         } else {
