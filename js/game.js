@@ -355,8 +355,7 @@ game.States.preload = function () {
         game.load.image('nfls', 'assets/nfls.png');
 
         game.load.bitmapFont('flappy_font', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt');
-        var bgms = ["assets/audios/bgm1.m4a", "assets/audios/bgm1.m4a", "assets/audios/bgm2.m4a", "assets/audios/bgm2.m4a", "assets/audios/bgm3.m4a"];
-	    game.load.audio('bgm', bgms[getRandomNumber(0, 5)]);
+	    game.load.audio('bgm',"assets/audios/bgm.m4a"]);
         game.load.audio('fly_sound', 'assets/audios/flap.m4a');
         game.load.audio('score_sound', 'assets/audios/score.m4a');
         game.load.audio('hit_pipe_sound', 'assets/audios/pipe-hit.m4a');
