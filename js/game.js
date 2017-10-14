@@ -578,7 +578,7 @@ game.States.play = function () {
             this.doubleLabel = game.add.text(game.width / 2 + 90, game.height - 170, 'Double', textStyle_5);
             this.doubleText = game.add.text(game.width / 2 + 90, game.height - 150, doublePack + '', textStyle_4);
             this.doubleBtn.inputEnabled = true;
-            this.doubleBtn.events.onInputDown.addOnce(function() {self.utilizeRequest('double')});
+            this.doubleBtn.events.onInputDown.addOnce(function() {utilizeRequest('double')});
         }
 
         this.readyText = game.add.image(game.width / 2, 40, 'ready_text');
@@ -684,50 +684,6 @@ game.States.play = function () {
         });
     }
 
-    this.purchaseRequest = function(packType) {
-        alert(packType);
-    }
-
-    this.utilizeRequest = function(packType) {
-        var self = this;
-        var needToPurchase = false;
-        switch (packType) {
-            case "recover": if (recoverPack == 0) needToPurchase = true; break;
-            case "double": if (doublePack == 0) needToPurchase = true; break;
-        }
-        if (needToPurchase) {
-            if (typeof deviceUsername != "undefined") {
-                this.purchaseRequest(packType);
-            } else {
-                alert("😂Sorry, only iOS device supports purchasement.");
-            }
-            return;
-        } else {
-            $.ajax({
-                async: false,
-                type: "POST",
-                content: this,
-                url: "https://api.nfls.io/game/fib/purchase",
-                dataType: "json",
-                data: {
-                    pack: packType
-                },
-                xhrFields:{
-                    withCredentials: true
-                },
-                success: function(message){
-                    recoverPack = message.info.recoverPack;
-                    doublePack = message.info.doublePack;
-                    switch (packType) {
-                        case "recover": useRecover = true; break;
-                        case "double": useDouble = true; break;
-                    }
-                }
-            });
-            game.state.start('play');
-        }
-    }
-
     this.showGameOverText = function () {
         var self = this;
         this.playerBeforeName = '';
@@ -790,11 +746,11 @@ game.States.play = function () {
         }, this, null, null, null, null, this.gameOverGroup);
         if (isOnline) {
             //var recoverBtn = game.add.sprite(game.width / 2 - 80, game.height - 150, 'blank_btn', this.gameOverGroup);
-            var recoverBtn = game.add.button(game.width / 2 - 80, game.height - 180, 'blank_btn', function() {self.utilizeRequest('recover')}, this, null, null, null, null, this.gameOverGroup);
+            var recoverBtn = game.add.button(game.width / 2 - 80, game.height - 180, 'blank_btn', function() {utilizeRequest('recover')}, this, null, null, null, null, this.gameOverGroup);
             var recoverLabel = game.add.text(game.width / 2 - 90, game.height - 175, 'Recover', textStyle_5, this.gameOverGroup);
             var recoverText = game.add.text(game.width / 2 - 50, game.height - 145, recoverPack + '', textStyle_4, this.gameOverGroup);
             //recoverBtn.inputEnabled = true;
-            //recoverBtn.events.onInputDown.addOnce(function() {self.utilizeRequest('recover')});
+            //recoverBtn.events.onInputDown.addOnce(function() {utilizeRequest('recover')});
             recoverBtn.anchor.setTo(0.5, 0);
             recoverLabel.anchor.setTo(0.5, 0);
             recoverText.anchor.setTo(0.5, 0);
@@ -919,9 +875,53 @@ function onPurchased(purchased, type, used) {
     type = type || null;
     used = used || true;
     if (type != null) {
-        this.utilizeRequest(type);
+        utilizeRequest(type);
     }
     game.state.start('play');
+}
+
+purchaseRequest = function(packType) {
+    alert(packType);
+}
+
+utilizeRequest = function(packType) {
+    var self = this;
+    var needToPurchase = false;
+    switch (packType) {
+        case "recover": if (recoverPack == 0) needToPurchase = true; break;
+        case "double": if (doublePack == 0) needToPurchase = true; break;
+    }
+    if (needToPurchase) {
+        if (typeof deviceUsername != "undefined") {
+            purchaseRequest(packType);
+        } else {
+            alert("😂Sorry, only iOS device supports purchasement.");
+        }
+        return;
+    } else {
+        $.ajax({
+            async: false,
+            type: "POST",
+            content: this,
+            url: "https://api.nfls.io/game/fib/purchase",
+            dataType: "json",
+            data: {
+                pack: packType
+            },
+            xhrFields:{
+                withCredentials: true
+            },
+            success: function(message){
+                recoverPack = message.info.recoverPack;
+                doublePack = message.info.doublePack;
+                switch (packType) {
+                    case "recover": useRecover = true; break;
+                    case "double": useDouble = true; break;
+                }
+            }
+        });
+        game.state.start('play');
+    }
 }
 
 game.state.add('boot', game.States.boot);
