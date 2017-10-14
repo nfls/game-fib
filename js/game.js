@@ -597,7 +597,7 @@ game.States.play = function () {
         useRecover = false;
         if (useDouble) {
             useDouble = false;
-            this.startGame();
+            //this.startGame();
         }
     };
 
