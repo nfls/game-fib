@@ -9,7 +9,7 @@ var playerAfterName;
 var playerAfterScore;
 var teachersAppeared;
 //var deviceUsername;
-//var isOnline;
+var isOnline;
 var topNames = new Array();
 var topScores = new Array();
 var topRanks = new Array();
@@ -219,6 +219,7 @@ function loadUsername(){
             withCredentials: true
         },
         success: function (message) {
+            isOnline = true;
             username = message.info; // 这个是用户名
         },
         error: function (message){
