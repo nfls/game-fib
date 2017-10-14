@@ -467,7 +467,7 @@ game.States.play = function () {
             }
         }
 
-        if (isOnline) this.getPurchased();
+        if (isOnline) getPurchased();
 
         currentRank = 'null';
         bestRank = 'null';
@@ -669,22 +669,6 @@ game.States.play = function () {
         if (show_text) this.showGameOverText();
     }
 
-    this.getPurchased = function() {
-        $.ajax({
-            async: false,
-            type: "GET",
-            content: this,
-            url: "https://api.nfls.io/game/fib/purchase",
-            xhrFields:{
-                withCredentials: true
-            },
-            success: function(message){
-                recoverPack = message.info.recoverPack;
-                doublePack = message.info.doublePack;
-            }
-        });
-    }
-
     this.showGameOverText = function () {
         var self = this;
         this.playerBeforeName = '';
@@ -875,10 +859,26 @@ function getRandomNumber(min, max) {
 function onPurchased(purchased, type, used) {
     type = type || null;
     used = used || true;
-    if (type != null) {
+    if (type != null && used == true) {
         utilizeRequest(type);
     }
     game.state.start('play');
+}
+
+getPurchased = function() {
+    $.ajax({
+        async: false,
+        type: "GET",
+        content: this,
+        url: "https://api.nfls.io/game/fib/purchase",
+        xhrFields:{
+            withCredentials: true
+        },
+        success: function(message){
+            recoverPack = message.info.recoverPack;
+            doublePack = message.info.doublePack;
+        }
+    });
 }
 
 purchaseRequest = function(packType) {
@@ -886,6 +886,7 @@ purchaseRequest = function(packType) {
 }
 
 utilizeRequest = function(packType) {
+    getPurchased();
     var self = this;
     var needToPurchase = false;
     switch (packType) {
