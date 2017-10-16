@@ -886,7 +886,6 @@ purchaseRequest = function(packType) {
 
 utilizeRequest = function(packType) {
     getPurchased();
-    alert(doublePack);
     var self = this;
     var needToPurchase = false;
     switch (packType) {
