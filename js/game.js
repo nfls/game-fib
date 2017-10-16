@@ -574,13 +574,6 @@ game.States.play = function () {
         game.add.text(game.world.centerX + 70, 460, '@GuardHei', textStyle_1);
         game.add.text(game.world.centerX + 70, 480, '@mmlmml1', textStyle_1);
 
-        if (isOnline) {
-            this.doubleBtn = game.add.sprite(game.width / 2 + 80, game.height - 180, 'blank_btn');
-            this.doubleLabel = game.add.text(game.width / 2 + 90, game.height - 170, 'Double', textStyle_5);
-            this.doubleText = game.add.text(game.width / 2 + 90, game.height - 150, doublePack + '', textStyle_4);
-            this.doubleBtn.inputEnabled = true;
-            this.doubleBtn.events.onInputDown.addOnce(function() {utilizeRequest('double')});
-        }
 
         this.readyText = game.add.image(game.width / 2, 40, 'ready_text');
         this.playTip = game.add.image(game.width / 2, 300, 'play_tip');
@@ -599,6 +592,12 @@ game.States.play = function () {
         if (useDouble) {
             useDouble = false;
             //this.startGame();
+        } else {
+            this.doubleBtn = game.add.sprite(game.width / 2 + 80, game.height - 180, 'blank_btn');
+            this.doubleLabel = game.add.text(game.width / 2 + 90, game.height - 170, 'Double', textStyle_5);
+            this.doubleText = game.add.text(game.width / 2 + 90, game.height - 150, doublePack + '', textStyle_4);
+            this.doubleBtn.inputEnabled = true;
+            this.doubleBtn.events.onInputDown.addOnce(function() {utilizeRequest('double')});
         }
     };
 
@@ -887,6 +886,7 @@ purchaseRequest = function(packType) {
 
 utilizeRequest = function(packType) {
     getPurchased();
+    alert(doublePack);
     var self = this;
     var needToPurchase = false;
     switch (packType) {
