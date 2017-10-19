@@ -9,10 +9,10 @@ function stringEndsWith($whole, $end)
 		$version_start = strpos($ua, "/");
 		$version_end = strpos($ua, " (");
 		$version = substr($ua, $version_start + 1, $version_end - $version_start - 1);
-		if(version_compare($version, "1.2.3",">=")){
+		if(version_compare($version, "1.2.4",">=")){
 			$file = "version.dev.lock";
 		}else{
-			die();
+			$file = "version.lock";
 		}
 	}
 	$v = file_get_contents($file);
