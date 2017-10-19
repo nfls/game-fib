@@ -340,6 +340,7 @@ game.States.boot = function () {
 
 game.States.preload = function () {
     this.preload = function () {
+    	this.stage.disableVisibilityChange = true;
         var preloadSprite = game.add.sprite(50, game.height / 2, 'loading');
         game.load.setPreloadSprite(preloadSprite);
         game.load.image('background', 'assets/background.png');
