@@ -860,8 +860,9 @@ function onPurchased(purchased, type, used) {
     used = used || true;
     if (type != null && used == true) {
         utilizeRequest(type);
+    } else {
+        game.state.start('play');
     }
-    game.state.start('play');
 }
 
 getPurchased = function() {
