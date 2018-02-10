@@ -196,46 +196,35 @@ function checkString (string) {
 }
 
 function loadUsername(){
-    if ((typeof token) != "undefined"){
-        $.ajax({
-            async:false,
-            type: "POST",
-            url: "https://nfls.io/quickaction.php?action=cookie",
-            dataType: "json",
-            data:{
-                token: token
-            },
-            xhrFields:{
-                withCredentials: true
-            }
-        });
-    }
-    $.cookie("token",$.cookie("token"),{domain:"nfls.io",path:"/"});
     $.ajax({
         type: "GET",
-        url: "https://api.nfls.io/center/username",
+        url: "/user/current",
         dataType: "json",
         xhrFields:{
             withCredentials: true
         },
         success: function (message) {
-            isOnline = true;
-            username = message.info; // 这个是用户名
+            if(message.code == 200){
+                isOnline = true;
+                username = message.data.username; // 这个是用户名
+            }else{
+                if(typeof deviceUsername == 'undefined'){
+                    jumpToLogin();
+                } else{
+                    username = deviceUsername;
+                    isOnline = false;
+                }
+            }
+           
         },
         error: function (message){
-            if(typeof deviceUsername == 'undefined'){
-                jumpToLogin();
-            } else{
-                username = deviceUsername;
-                isOnline = false;
-            }
+            
         }
     });
 }
 
 function jumpToLogin(){//转跳到登录界面
-    $.cookie('token', '', {path: '/', domain: 'nfls.io', secure: true, expires: -1});
-    window.location.href='https://center.nfls.io/operation/?reason=notlogin&redir=https%3a%2f%2fgame.nfls.io%2ffib';
+    window.location.href='/#/user/login';
 }
 
 function pharseScore(message){
@@ -254,7 +243,7 @@ function getScore(){
     $.ajax({
         async: false,
         type: "GET",
-        url: "https://api.nfls.io/game/fib/rank",
+        url: "https://nfls.io/game/rank",
         dataType: "json",
         xhrFields:{
             withCredentials: true
