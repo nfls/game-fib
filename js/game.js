@@ -202,6 +202,8 @@ function loadUsername() {
             if (message.code == 200) {
                 isOnline = true
                 username = message.data.username // 这个是用户名
+                if(!message.data.verified)
+                    alert("Your account is not verified! Your score will not be recorded.")
             } else {
                 jumpToLogin()
             }
@@ -682,7 +684,7 @@ game.States.play = function () {
         }, this, null, null, null, null, this.gameOverGroup)
 
         replayBtn.position.x = backBtn.position.x
-        replayBtn.position.y = backBtn.position.y + 80
+        replayBtn.position.y = backBtn.position.y - 80
         gameOverText.anchor.setTo(0.5, 0)
         scoreboard.anchor.setTo(0.5, 0)
         blankboard.anchor.setTo(0.5, 0)
