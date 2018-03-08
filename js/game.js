@@ -326,7 +326,7 @@ function IsEmpty(v) {
 
 game.States.boot = function () {
     loadUsername()
-    if (typeof deviceUsername == 'undefined') {
+    if (typeof deviceUsername === 'undefined') {
         isOnline = true
     }
     this.preload = function () {
@@ -361,7 +361,6 @@ game.States.preload = function () {
         game.load.image('nfls', 'assets/nfls.png')
 
         game.load.bitmapFont('flappy_font', 'assets/fonts/flappyfont/flappyfont.png', 'assets/fonts/flappyfont/flappyfont.fnt')
-        game.load.audio('bgm', "assets/audios/bgm.m4a")
         game.load.audio('fly_sound', 'assets/audios/flap.m4a')
         game.load.audio('score_sound', 'assets/audios/score.m4a')
         game.load.audio('hit_pipe_sound', 'assets/audios/pipe-hit.m4a')
@@ -396,10 +395,6 @@ game.States.preload = function () {
         game.load.image('guol', 'assets/players/_GuoL.png')
         game.load.image('knights', 'assets/players/_Knights.png')
         game.load.image('perry', 'assets/players/_Perry.png')
-
-        this.bgm = game.add.audio('bgm')
-        this.bgm.loop = true
-        this.bgm.play()
 
         initTeachers()
         teachersAppeared = new Array()
