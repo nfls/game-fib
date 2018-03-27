@@ -53,23 +53,19 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
     <script src="js/phaser.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113518783-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-113518783-1');
+    </script>
 </head>
 <body>
 <div id="game" style="margin:0px"></div>
 <script>
     document.write("<s" + "cript type='text/javascript' src='js/game.js?" + Math.random() + "'></scr" + "ipt>")
-</script>
-<!-- Global Site Tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-92193639-11"></script>
-<script>
-    window.dataLayer = window.dataLayer || []
-
-    function gtag() {
-        dataLayer.push(arguments)
-    }
-    gtag('js', new Date())
-
-    gtag('config', 'UA-92193639-11')
 </script>
 </body>
 </html>
