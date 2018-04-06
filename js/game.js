@@ -334,6 +334,7 @@ game.States.boot = function () {
             this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
             this.scale.forcePortrait = true
             this.scale.refresh()
+            //console.log("YES")
         }
         game.load.image('loading', 'assets/preloader.gif')
     }

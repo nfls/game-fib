@@ -9,45 +9,21 @@
     <meta charset="utf-8"/>
     <title>FIB</title>
     <style>
+        html {
+            height: 100%;
+            width: 100%;
+            margin: 0 auto;
+        }
+
         body, p, div {
             margin: 0;
             padding: 0;
+            height: 100%;
+            width: 100%;
         }
 
         canvas {
             margin: 0 auto;
-        }
-
-        @media screen and (max-width: 400px) {
-            div {
-                width：200px;
-            }
-        }
-
-        @media screen (min-width:
-
-        400px
-
-        ) and
-
-        (max-width:
-
-        600px
-
-        ) {
-            div {
-                width：300px;
-            }
-        }
-
-        @media screen (min-width:
-
-        600px
-
-        ) {
-            div {
-                width：300px;
-            }
         }
     </style>
     <script src="js/jquery.min.js"></script>
@@ -63,7 +39,7 @@
     </script>
 </head>
 <body>
-<div id="game" style="margin:0px"></div>
+<div id="game" style="margin:0px;width:100%;height:100%;"></div>
 <script>
     document.write("<s" + "cript type='text/javascript' src='js/game.js?" + Math.random() + "'></scr" + "ipt>")
 </script>
